@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museu Virtual Interativo</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <div id="instrucoes">
+    Computador: WASD + mouse | Quest 3: controles + gatilho
+  </div>
+
+  <a-scene
+  id="cena"
+  background="color: #BDE8FF"
+  renderer="antialias: true; colorManagement: true"
+  shadow="type: pcfsoft"
+  vr-mode-ui="enabled: true">
+<!-- Iluminacao -->
+<a-entity light="type: ambient; color: #FFFFFF; intensity: 0.75"></a-entity>
+<a-entity
+  light="type: directional; color: #FFFFFF; intensity: 0.9; castShadow: true"
+  position="3 7 5">
+</a-entity>
+
+<!-- Ceu e piso -->
+<a-sky color="#BDE8FF"></a-sky>
+<a-plane
+  position="0 0 -2" rotation="-90 0 0"
+  width="16" height="20" color="#E9EEF5"
+  shadow="receive: true">
+</a-plane>
+
+<!-- Paredes -->
+<a-box position="-7.5 2 -2" width="0.2" height="4" depth="18" color="#D7DDEC"></a-box>
+<a-box position="7.5 2 -2" width="0.2" height="4" depth="18" color="#D7DDEC"></a-box>
+<a-box position="0 2 -9" width="15" height="4" depth="0.2" color="#D7DDEC"></a-box>
+<!-- Titulo e instrucao -->
+<a-text
+  value="MUSEU DA TECNOLOGIA"
+  position="0 3.5 1" align="center"
+  color="#17233C" width="8">
+</a-text>
+<a-text
+  value="Aponte e clique nos tres objetos para abrir a porta"
+  position="0 3.05 1" align="center"
+  color="#576492" width="7">
+</a-text>
+
+<!-- Painel que o JavaScript atualizara -->
+<a-plane
+  position="0 2.5 -4.8"
+  width="7.2" height="1.7" color="#17233C">
+</a-plane>
+<a-text
+  id="textoInfo"
+  value="Escolha uma das tres pecas da exposicao."
+  position="0 2.65 -4.68" align="center"
+  color="#FFFFFF" width="6.5" wrap-count="48">
+</a-text>
+<a-text
+  id="placar"
+  value="Objetos visitados: 0 de 3"
+  position="0 2.05 -4.68" align="center"
+  color="#0CC8F2" width="5">
+</a-text>
+<!-- Exposicao 1 -->
+<a-cylinder
+  position="-3.5 0.45 0"
+  radius="1.05" height="0.9" color="#FFFFFF">
+</a-cylinder>
+<a-box
+  id="computador" class="clicavel"
+  objeto-exposicao="mensagem: os primeiros computadores ocupavam salas inteiras.; 
+  cordestaque: #FFD166"
+  position="-3.5 1.45 0"
+  width="1.7" height="1.3" depth="0.75"
+  color="#553DF2" shadow="cast: true">
+  <a-text value="COMPUTADOR" position="0 0.9 0"
+    align="center" color="#17233C" width="3.5">
+  </a-text>
+</a-box>
+
+<!-- Exposicao 2 -->
+<a-cylinder
+  position="0 0.45 0"
+  radius="1.05" height="0.9" color="#FFFFFF">
+</a-cylinder>
+<a-cylinder
+
+
+  id="robo" class="clicavel"
+  objeto-exposicao="
+  mensagem: Robos usam sensores e programas para executar tarefas.;
+  cordestaque: #FFD166"
+  position="0 1.55 0"
+  radius="0.75" height="1.6"
+  color="#3F8DF6" shadow="cast: true">
+  <a-text value="ROBO" position="0 1.15 0"
+    align="center" color="#17233C" width="3">
+  </a-text>
+</a-cylinder>
+<!-- Exposicao 3 -->
+<a-cylinder position="3.5 0.45 0"
+  radius="1.05" height="0.9" color="#FFFFFF">
+</a-cylinder>
+<a-sphere
+
+  id="realidadeVirtual" class="clicavel"
+objeto-exposicao="
+  mensagem: A realidade virtual cria presenca em um mundo digital.;
+  cordestaque: #FFD166"
+
+  position="3.5 1.55 0" radius="0.9"
+  color="#0CC8F2" shadow="cast: true">
+  <a-text value="REALIDADE VIRTUAL" position="0 1.25 0"
+    align="center" color="#17233C" width="4">
+  </a-text>
+</a-sphere>
+
+<!-- Porta e mensagem final -->
+<a-box id="porta" position="0 1.6 -7.7"
+  width="3.2" height="3.2" depth="0.35" color="#E04F5F">
+</a-box>
+<a-text id="textoPorta" value="PORTA BLOQUEADA"
+  position="0 3.5 -7.48" align="center"
+  color="#17233C" width="5">
+</a-text>
+<a-text value="PARABENS! VOCE CONCLUIU O MUSEU."
+  position="0 2.5 -8.75"
+  align="center" color="#553DF2" width="6">
+</a-text>
+
+<!-- Botao; o comportamento sera programado depois -->
+<a-box id="botaoReiniciar" class="clicavel"
+  reiniciar-museu
+position="0 0.45 3.2"
+  width="2.7" height="0.35" depth="0.9" color="#576492">
+  <a-text value="REINICIAR" position="0 0.25 0.46"
+    rotation="-25 0 0" align="center" color="#FFFFFF" width="3">
+  </a-text>
+</a-box>
+<!-- Camera e controles -->
+<a-entity id="rig" position="0 0 6">
+  <a-camera
+    id="camera"
+    position="0 1.6 0"
+    wasd-controls="acceleration: 18"
+    look-controls>
+  </a-camera>
+
+  <a-entity
+    id="maoEsquerda"
+    laser-controls="hand: left"
+    raycaster="objects: .clicavel; far: 30"
+    movimento-quest="velocidade: 2">
+  </a-entity>
+
+  <a-entity
+    id="maoDireita"
+    laser-controls="hand: right"
+    raycaster="objects: .clicavel; far: 30">
+  </a-entity>
+</a-entity>
+
+<!-- Clique direto com o mouse no computador -->
+<a-entity
+  cursor="rayOrigin: mouse"
+  raycaster="objects: .clicavel">
+</a-entity>
+
+  </a-scene>
+</body>
+</html>
